@@ -1,6 +1,6 @@
 import { MyLitElement } from './myLit.js';
 
-class Counter extends MyLitElement {
+export class Counter extends MyLitElement {
     constructor() {
         super();
         this.state = { count: 0 };
@@ -13,7 +13,7 @@ class Counter extends MyLitElement {
 
 
     disconnectedCallback() {
-        const button = this.querySelector("#inc")
+        const button = this.shadowRoot.querySelector("#inc")
 		if (button)
 			button.removeEventListener("click", this.increment);
     }
@@ -23,7 +23,7 @@ class Counter extends MyLitElement {
     }
 
     attachEvents() {
-		const button = this.querySelector("#inc")
+		const button = this.shadowRoot.querySelector("#inc")
 		if (button)
 			button.addEventListener("click", this.increment);
     }
@@ -36,9 +36,8 @@ class Counter extends MyLitElement {
     }
 }
 
-customElements.define('my-counter', Counter);
 
-class User extends MyLitElement {
+export class User extends MyLitElement {
     constructor() {
         super();
         this.state = { users: [] };
@@ -53,21 +52,28 @@ class User extends MyLitElement {
     }
 
     attachEvents() {
-        const button = this.querySelector("#fetch");
+        const button = this.shadowRoot.querySelector("#fetch");
         if (button) {
             // button.removeEventListener("click", this.fetchUser);
             button.addEventListener("click", this.fetchUser);
         }
     }
+	disconnectedCallback() {
+		const button = this.shadowRoot.querySelector("#fetch");
+		if (button)
+			button.removeEventListener("click",  this.fetchUser);
+    }
+
 
     template() {
         return `
-            <my-counter></my-counter>
-            <br/>
-            ${this.state.users.map(user => `<p>${user.email}</p>`).join('')}
-            <button id="fetch">fetch</button>
+			<div class="flex justify-center items-center" >
+				<my-counter></my-counter>
+				<br/>
+				${this.state.users.map(user => `<p>${user.email}</p>`).join('')}
+				<button id="fetch">fetch</button>
+			</div>
         `;
     }
 }
 
-customElements.define('user-fetch', User);

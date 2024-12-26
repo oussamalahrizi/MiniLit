@@ -1,4 +1,4 @@
-export class MyLitElement extends HTMLElement {
+export class 	MyLitElement extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
@@ -17,7 +17,10 @@ export class MyLitElement extends HTMLElement {
 
     render() {
         const template = document.createElement('template');
-        template.innerHTML = this.template();
+		
+        template.innerHTML = `
+			<link rel="stylesheet" href="./styles/output.css">
+			${this.template()}`
         const newContent = template.content.cloneNode(true);
 
         this.reconcile(this.shadowRoot, newContent);
